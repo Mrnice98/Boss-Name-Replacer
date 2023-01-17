@@ -104,9 +104,5 @@ public class BossNamePlugin extends Plugin
 		log.info("BossNameReplacer Stopped");
 	}
 
-	@Provides
-	BossNameConfig provideConfig(ConfigManager configManager)
-	{
-		return configManager.getConfig(BossNameConfig.class);
-	}
+
 }
