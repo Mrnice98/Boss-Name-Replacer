@@ -28,9 +28,6 @@ public class BossNamePlugin extends Plugin
 	@Inject
 	private Client client;
 
-	@Inject
-	private BossNameConfig config;
-
 	@Subscribe
 	public void onChatMessage(ChatMessage event)
 	{
