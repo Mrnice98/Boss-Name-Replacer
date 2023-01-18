@@ -111,7 +111,7 @@ public class BossNamePlugin extends Plugin
 
 		if (event.getActor().getName().equals("Phantom Muspah") && event.getActor().getHealthRatio() == 0 && config.catchPhrases() && event.getActor().getOverheadCycle() == 0)
 		{
-			int rand = r.nextInt(spawnPhrases.size());
+			int rand = r.nextInt(killPhrases.size());
 			event.getActor().setOverheadText(killPhrases.get(rand));
 			event.getActor().setOverheadCycle(80);
 		}
