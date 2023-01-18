@@ -36,6 +36,7 @@ public class BossNamePlugin extends Plugin
 	@Inject
 	private BossNameConfig config;
 
+	private final Random r = new Random();
 	private final List<String> spawnPhrases = Arrays.asList("It's grumblin time!","No pet?","Prepare to be grumbled!","You are no match for The Grumbler!","Grumbler SMASH!","Who dares awaken The Grumbler!");
 	private final List<String> killPhrases = Arrays.asList("Ive been grumbled!","Im gunna grumble!","F","Ive been out grumbled","My grumble sense is tingling","The Grumbler has been bested!","Back to the grumble cave i go...","Not my grumble goop!");
 
@@ -110,12 +111,13 @@ public class BossNamePlugin extends Plugin
 
 		if (event.getActor().getName().equals("Phantom Muspah") && event.getActor().getHealthRatio() == 0 && config.catchPhrases() && event.getActor().getOverheadCycle() == 0)
 		{
-			int rand = ThreadLocalRandom.current().nextInt(0,killPhrases.size());
+			int rand = r.nextInt(spawnPhrases.size());
 			event.getActor().setOverheadText(killPhrases.get(rand));
 			event.getActor().setOverheadCycle(80);
 		}
 
 	}
+
 
 	@Subscribe
 	public void onNpcSpawned(NpcSpawned event)
@@ -124,7 +126,7 @@ public class BossNamePlugin extends Plugin
 
 		if (event.getNpc().getName().equals("Phantom Muspah") && config.catchPhrases())
 		{
-			int rand = ThreadLocalRandom.current().nextInt(0,spawnPhrases.size());
+			int rand = r.nextInt(spawnPhrases.size());
 			event.getNpc().setOverheadCycle(100);
 			event.getNpc().setOverheadText(spawnPhrases.get(rand));
 		}
