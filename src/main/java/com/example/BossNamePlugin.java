@@ -3,12 +3,11 @@ package com.example;
 import com.google.inject.Provides;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.ChatMessageType;
-import net.runelite.api.Client;
-import net.runelite.api.GameState;
-import net.runelite.api.NPC;
+import net.runelite.api.*;
 import net.runelite.api.events.*;
 import net.runelite.api.widgets.Widget;
+import net.runelite.client.chat.ChatMessageManager;
+import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
@@ -36,8 +35,11 @@ public class BossNamePlugin extends Plugin
 	@Inject
 	private BossNameConfig config;
 
+	@Inject
+	private ChatMessageManager chatMessageManager;
+
 	private final Random r = new Random();
-	private final List<String> spawnPhrases = Arrays.asList("It's grumblin time!","No pet?","Prepare to be grumbled!","You are no match for The Grumbler!","Grumbler SMASH!","Who dares awaken The Grumbler!");
+	private final List<String> spawnPhrases = Arrays.asList("It's grumblin time!","No pet?","Prepare to be grumbled!","You are no match for The Grumbler!","Grumbler SMASH!","Who dares awaken The Grumbler!","I’m not fat. I’m cultivating mass");
 	private final List<String> killPhrases = Arrays.asList("Ive been grumbled!","Im gunna grumble!","F","Ive been out grumbled","My grumble sense is tingling","The Grumbler has been bested!","Back to the grumble cave i go...","Not my grumble goop!");
 
 	@Subscribe
@@ -57,6 +59,18 @@ public class BossNamePlugin extends Plugin
 			}
 		}
 	}
+
+	@Subscribe
+	public void onMenuOptionClicked(MenuOptionClicked event)
+	{
+		if (event.getMenuEntry().getTarget().contains("The Grumbler") && event.getMenuEntry().getType() == MenuAction.EXAMINE_NPC)
+		{
+			event.consume();
+			String grumblerLore = "Let me tell you something. I haven’t even begun to grumble. And when I do grumble, you’ll know. Because I’m gonna grumble so hard that my grumble goo is gunna go everywhere!";
+			chatMessageManager.queue(QueuedMessage.builder().type(ChatMessageType.GAMEMESSAGE).runeLiteFormattedMessage(grumblerLore).build());
+		}
+	}
+
 
 	@Subscribe
 	public void onMenuEntryAdded(MenuEntryAdded event)
@@ -80,6 +94,7 @@ public class BossNamePlugin extends Plugin
 		Widget colName = client.getWidget(621,12);
 		Widget colNameBig = client.getWidget(621,19);
 		Widget colNameSmall = client.getWidget(621,19);
+		Widget scoreBoardName = client.getWidget(817,6);
 
 		if (bossName != null && bossName.getText().contains("Phantom Muspah"))
 		{
@@ -101,8 +116,12 @@ public class BossNamePlugin extends Plugin
 			colNameSmall.setText(colNameSmall.getText().replace("Phantom Muspah","The Grumbler"));
 		}
 
-	}
+		if (scoreBoardName != null)
+		{
+			scoreBoardName.setText(scoreBoardName.getText().replace("Phantom Muspah","The Grumbler"));
+		}
 
+	}
 
 	@Subscribe
 	public void onAnimationChanged(AnimationChanged event)
