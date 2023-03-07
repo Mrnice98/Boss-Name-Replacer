@@ -1,7 +1,6 @@
 package com.example;
 
 import com.google.inject.Provides;
-import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.*;
@@ -12,12 +11,12 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.util.Text;
 
-import java.util.ArrayList;
+import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -48,16 +47,49 @@ public class BossNamePlugin extends Plugin
 
 		if (event.getMessageNode().getType() == ChatMessageType.GAMEMESSAGE)
 		{
-			if (event.getMessage().contains("Phantom Muspah"))
-			{
-				event.getMessageNode().setValue(event.getMessage().replace("Phantom Muspah","Grumbler"));
+			if (event.getMessage().contains("Phantom Muspah")) {
+				event.getMessageNode().setValue(event.getMessage().replace("Phantom Muspah", "Grumbler"));
 			}
 
-			if (event.getMessage().contains("Muphin") && config.renamePet())
+			if (event.getMessage().contains("Muphin") && config.renamePet()) {
+				event.getMessageNode().setValue(event.getMessage().replace("Muphin", "Lil' Grumble"));
+			}
+
+			String text = Text.removeTags(event.getMessage());
+
+			if (text.startsWith("Nex: "))
 			{
-				event.getMessageNode().setValue(event.getMessage().replace("Muphin","Lil' Grumble"));
+				if (text.contains("ZAROS")) {
+					text = text.replace("ZAROS", "DIVINE ZAROS");
+					event.getMessageNode().setValue(text);
+				}
+
+				if (text.contains("Contain this!")) {
+					text = text.replace("Contain this!", "Contain deez nutz!");
+					event.getMessageNode().setValue(text);
+				}
+
+				if (text.contains("AT LAST!")) {
+					text = text.replace("AT LAST!", "AT LAST A TOP 5 GAMER!");
+					event.getMessageNode().setValue(text);
+				}
+
+				if (text.contains("Fear the shadow!")) {
+					text = text.replace("Fear the shadow!", "Fear the hog!");
+					event.getMessageNode().setValue(text);
+				}
+
+				if (text.contains("Taste my wrath!")) {
+					text = text.replace("Taste my wrath!", "Toad batta!");
+					event.getMessageNode().setValue(text);
+				}
+
+
 			}
 		}
+
+
+
 	}
 
 	@Subscribe
@@ -121,6 +153,44 @@ public class BossNamePlugin extends Plugin
 			scoreBoardName.setText(scoreBoardName.getText().replace("Phantom Muspah","The Grumbler"));
 		}
 
+		List<NPC> nexs = client.getNpcs().stream().filter(npc -> npc.getName().equals("Nex")).collect(Collectors.toList());
+		if (!nexs.isEmpty())
+		{
+			NPC nex = nexs.get(0);
+			String text = Text.removeTags(nex.getOverheadText());
+
+			if (text.contains("ZAROS"))
+			{
+				text = text.replace("ZAROS", "DIVINE ZAROS");
+				nex.setOverheadText(text);
+			}
+
+			if (text.contains("Contain this!"))
+			{
+				text = text.replace("Contain this!", "Contain deez nutz!");
+				nex.setOverheadText(text);
+			}
+
+			if (text.contains("AT LAST!"))
+			{
+				text = text.replace("AT LAST!", "AT LAST A TOP 5 GAMER!");
+				nex.setOverheadText(text);
+			}
+
+			if (text.contains("Fear the shadow!"))
+			{
+				text = text.replace("Fear the shadow!", "Fear the hog!");
+				nex.setOverheadText(text);
+			}
+
+			if (text.contains("Taste my wrath!"))
+			{
+				text = text.replace("Taste my wrath!", "Toad batta!");
+				nex.setOverheadText(text);
+			}
+
+
+		}
 	}
 
 	@Subscribe
