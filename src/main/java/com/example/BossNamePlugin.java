@@ -64,11 +64,6 @@ public class BossNamePlugin extends Plugin
 					event.getMessageNode().setValue(text);
 				}
 
-				if (text.contains("Contain this!")) {
-					text = text.replace("Contain this!", "Contain deez nutz!");
-					event.getMessageNode().setValue(text);
-				}
-
 				if (text.contains("AT LAST!")) {
 					text = text.replace("AT LAST!", "AT LAST A TOP 5 GAMER!");
 					event.getMessageNode().setValue(text);
